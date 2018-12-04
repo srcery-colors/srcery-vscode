@@ -14,3 +14,17 @@ to see more orthodox implementations of the theme.
 
 Search for the `Srcery` theme in the marketplace
 
+
+## Screenshots
+
+### C
+
+![Screenshot of mrsh code](assets/screenshot_mrsh_c.png)
+
+### Python
+
+![Screenshot of diceware](assets/screenshot_diceware_py.png)
+
+### Peek // Rust
+
+![Screenshot of advent of code solution in Rust with Peek](assets/screenshot_advent_peek_rust.png)
