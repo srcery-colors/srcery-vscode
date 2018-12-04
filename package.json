@@ -2,7 +2,7 @@
     "name": "srcery",
     "displayName": "Srcery",
     "description": "gagbo's Srcery theme based on the srcery-colors themes",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "publisher": "gagbo",
     "license": "MIT",
     "engines": {
