@@ -8,3 +8,6 @@
 
 ### [v0.1.1]
 - Make the Peek view background more readable
+
+### [v0.1.2]
+- Add Screenshots for the description
