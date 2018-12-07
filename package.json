@@ -1,9 +1,9 @@
 {
-    "name": "srcery",
-    "displayName": "Srcery",
-    "description": "gagbo's Srcery theme based on the srcery-colors themes",
-    "version": "0.1.2",
-    "publisher": "gagbo",
+    "name": "srcery-colors",
+    "displayName": "Srcery (official port)",
+    "description": "Srcery theme based on the srcery-colors themes",
+    "version": "0.1.0",
+    "publisher": "srcery-colors",
     "license": "MIT",
     "engines": {
         "vscode": "^1.19.0"
@@ -21,12 +21,12 @@
         ]
     },
     "bugs": {
-        "url": "https://github.com/gagbo/vscode-srcery/issues"
+        "url": "https://github.com/srcery-colors/vscode-srcery/issues"
     },
-    "homepage": "https://github.com/gagbo/vscode-srcery/master/README.md",
+    "homepage": "https://github.com/srcery-colors/vscode-srcery/master/README.md",
     "repository": {
         "type": "git",
-        "url": "https://github.com/gagbo/vscode-srcery.git"
+        "url": "https://github.com/srcery-colors/vscode-srcery.git"
     },
     "keywords": [
         "Vscode",
