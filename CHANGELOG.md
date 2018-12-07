@@ -10,3 +10,8 @@
 
 ### [v0.2.1]
 - Add icon and banner attributes to the Marketplace extension page
+
+### [v0.2.2]
+- Prettify README further for marketplace and github with badges
+- Add attribution section for the starter theme
+- Add call to issues
