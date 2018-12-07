@@ -21,12 +21,12 @@
         ]
     },
     "bugs": {
-        "url": "https://github.com/srcery-colors/vscode-srcery/issues"
+        "url": "https://github.com/srcery-colors/srcery-vscode/issues"
     },
-    "homepage": "https://github.com/srcery-colors/vscode-srcery/master/README.md",
+    "homepage": "https://github.com/srcery-colors/srcery-vscode/master/README.md",
     "repository": {
         "type": "git",
-        "url": "https://github.com/srcery-colors/vscode-srcery.git"
+        "url": "https://github.com/srcery-colors/srcery-vscode"
     },
     "keywords": [
         "Vscode",
