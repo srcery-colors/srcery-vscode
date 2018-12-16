@@ -15,3 +15,7 @@
 - Prettify README further for marketplace and github with badges
 - Add attribution section for the starter theme
 - Add call to issues
+
+### [v0.2.3]
+- Add colors for Base, Scrollbar, Input, Dropdown, Text and Button
+- Change current List attributes so the hover is more visible and the current choice has different color from the rest of the list
