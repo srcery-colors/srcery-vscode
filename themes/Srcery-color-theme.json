@@ -70,7 +70,7 @@
 	"tokenColors": [
 		{
 			"settings": {
-				"background": "#1c1b19",
+				// "background": "#1c1b19",
 				"foreground": "#fce8c3"
 			}
 		},
@@ -228,7 +228,7 @@
 			"name": "Invalid",
 			"scope": "invalid",
 			"settings": {
-				"background": "#ef2f27",
+				// "background": "#ef2f27",
 				"fontStyle": "",
 				"foreground": "#F8F8F0"
 			}
@@ -237,7 +237,7 @@
 			"name": "Invalid deprecated",
 			"scope": "invalid.deprecated",
 			"settings": {
-				"background": "#AE81FF",
+				// "background": "#AE81FF",
 				"foreground": "#F8F8F0"
 			}
 		},
