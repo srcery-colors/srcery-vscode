@@ -2,7 +2,7 @@
     "name": "srcery-colors",
     "displayName": "Srcery (official port)",
     "description": "Srcery theme based on the srcery-colors themes",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "publisher": "srcery-colors",
     "license": "MIT",
     "engines": {
