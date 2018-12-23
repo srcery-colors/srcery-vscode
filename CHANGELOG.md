@@ -20,7 +20,8 @@
 - Add colors for Base, Scrollbar, Input, Dropdown, Text and Button
 - Change current List attributes so the hover is more visible and the current choice has different color from the rest of the list
 
-### [v0.2.4 - Not published yet]
+### [v0.3.0]
+- Make panel, activityBar and sideBar darker than the editor, to shift focus towards editor
 - Add Line Numbers highlights
 - Change Selection background to a lighter greenish color
-- Make panel, activityBar and sideBar darker than the editor, to shift focus towards editor
+- Various tweaks to existing colors for readability

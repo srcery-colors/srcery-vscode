@@ -1,7 +1,7 @@
 {
     "name": "Srcery",
     "colors": {
-        "activityBar.background": "#000000",
+        "activityBar.background": "#0a0908",
         "activityBar.border": "#1c1b19",
         "activityBar.dropBackground": "#1c1b19",
         "activityBar.foreground": "#fce8c3",
@@ -60,7 +60,7 @@
         "list.inactiveSelectionForeground": "#3f688c",
         "list.invalidItemForeground": "#ff0000",
         "list.warningForeground": "#fbb829",
-        "panel.background": "#000000",
+        "panel.background": "#0a0908",
         "panel.border": "#918175",
         "panel.dropBackground": "#1c1b1940",
         "panelTitle.activeBorder": "#fce8c3",
@@ -77,16 +77,16 @@
         "peekViewResult.matchHighlightBackground": "#e02c6d",
         "peekViewResult.selectionBackground": "#414339",
         "peekViewResult.selectionForeground": "#fce8c3",
-        "peekViewTitle.background": "#000000",
+        "peekViewTitle.background": "#0a0908",
         "peekViewTitleDescription.foreground": "#918175",
         "peekViewTitleLabel.foreground": "#fce8c3",
         "progressBar.background": "#519f50",
         "scrollbar.shadow": "#00000000",
-        "scrollbarSlider.background": "#2D2D2D",
+        "scrollbarSlider.background": "#877c69B0",
         "scrollbarSlider.activeBackground": "#ffebc6",
         "scrollbarSlider.hoverBackground": "#877c69",
         "selection.background": "#657A1A",
-        "sideBar.background": "#000000",
+        "sideBar.background": "#0a0908",
         "sideBar.border": "#918175",
         "sideBar.foreground": "#918175",
         "sideBarSectionHeader.background": "#1c1b19",
@@ -125,7 +125,7 @@
         "textSeparator.foreground": "#fbb829",
         "titleBar.activeForeground": "#918175",
         "titleBar.inactiveForeground": "#fce8c3",
-        "widget.shadow": "#000000"
+        "widget.shadow": "#0a0908"
     },
     "tokenColors": [
         {
