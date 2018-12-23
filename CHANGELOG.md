@@ -25,3 +25,6 @@
 - Add Line Numbers highlights
 - Change Selection background to a lighter greenish color
 - Various tweaks to existing colors for readability
+
+### [v0.3.1]
+- Make the tabline darker to finish the focus effect
