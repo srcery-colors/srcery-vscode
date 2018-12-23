@@ -22,3 +22,5 @@
 
 ### [v0.2.4 - Not published yet]
 - Add Line Numbers highlights
+- Change Selection background to a lighter greenish color
+- Make panel, activityBar and sideBar darker than the editor, to shift focus towards editor
