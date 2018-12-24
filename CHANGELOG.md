@@ -31,3 +31,6 @@
 
 ### [v0.3.2]
 - Add a few tab. colors to enhance the active tab
+
+### [v0.3.3]
+- Make the list.active foreground more readable (when keyboard focus is on a list)
