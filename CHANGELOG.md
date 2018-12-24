@@ -28,3 +28,6 @@
 
 ### [v0.3.1]
 - Make the tabline darker to finish the focus effect
+
+### [v0.3.2]
+- Add a few tab. colors to enhance the active tab
