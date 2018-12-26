@@ -34,3 +34,5 @@
 
 ### [v0.3.3]
 - Make the list.active foreground more readable (when keyboard focus is on a list)
+- Make the list.active foreground more readable (when keyboard focus is not on the list)
+- Finish editorGroup and tab behaviour
