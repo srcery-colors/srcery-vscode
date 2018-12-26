@@ -64,7 +64,7 @@
         "list.hoverForeground": "#918175",
         "list.inactiveFocusBackground": "#3f688c",
         "list.inactiveSelectionBackground": "#2d2c29",
-        "list.inactiveSelectionForeground": "#3f688c",
+        "list.inactiveSelectionForeground": "#68a8e4",
         "list.invalidItemForeground": "#ff0000",
         "list.warningForeground": "#fbb829",
         "panel.background": "#121212",
