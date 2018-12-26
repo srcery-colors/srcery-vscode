@@ -12,19 +12,17 @@ Search for the `Srcery` theme in the
 [marketplace](https://marketplace.visualstudio.com/items?itemName=srcery-colors.srcery-colors)
 
 
-## Screenshots
+## Screenshot (v0.3.3)
 
-### C
+### UI panels/bars
 
-![Screenshot of mrsh code](assets/screenshot_mrsh_c.png)
+This code is from the neovim-qt project.
 
-### Python
+![Screenshot of neovim-qt code](assets/Screenshot_v0.3.3.png)
 
-![Screenshot of diceware](assets/screenshot_diceware_py.png)
+### Peek
 
-### Peek // Rust
-
-![Screenshot of advent of code solution in Rust with Peek](assets/screenshot_advent_peek_rust.png)
+![Screenshot of neovim-qt code with Peek](assets/Screenshot_v0.3.3_peek.png)
 
 ## Troubleshooting
 
