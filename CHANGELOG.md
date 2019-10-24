@@ -36,3 +36,10 @@
 - Make the list.active foreground more readable (when keyboard focus is on a list)
 - Make the list.active foreground more readable (when keyboard focus is not on the list)
 - Finish editorGroup and tab behaviour
+
+### [v0.3.4]
+- Add selection colors
+- Make selection background not opaque
+- Add word highlight colors
+- Add find matches colors
+- Add hover highlight color
