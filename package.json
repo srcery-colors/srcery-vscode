@@ -39,6 +39,6 @@
         "Srcery"
     ],
     "dependencies": {
-        "vsce": "^1.54.0"
+        "vsce": "^1.68.0"
     }
 }
