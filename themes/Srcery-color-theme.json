@@ -161,8 +161,8 @@
         "textLink.foreground": "#2c78bf",
         "textPreformat.foreground": "#918175",
         "textSeparator.foreground": "#fbb829",
-        "titleBar.activeForeground": "#918175",
-        "titleBar.inactiveForeground": "#fce8c3",
+        "titleBar.activeForeground": "#fce8c3",
+        "titleBar.inactiveForeground": "#918175",
         "widget.shadow": "#121212"
     },
     "tokenColors": [

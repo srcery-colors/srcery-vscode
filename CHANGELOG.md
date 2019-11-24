@@ -43,3 +43,7 @@
 - Add word highlight colors
 - Add find matches colors
 - Add hover highlight color
+
+### [v0.3.5]
+- Fix issue #2 with titleBar colors
+- [Technical] Add package-lock to the repo
