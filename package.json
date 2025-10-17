@@ -1,44 +1,38 @@
 {
-    "name": "srcery-colors",
-    "displayName": "Srcery (official port)",
-    "description": "Srcery theme based on the srcery-colors themes",
-    "version": "0.3.8",
-    "publisher": "srcery-colors",
-    "license": "MIT",
-    "engines": {
-        "vscode": "^1.19.0"
-    },
-    "categories": [
-        "Themes"
-    ],
-    "icon": "assets/icon.png",
-    "galleryBanner": {
-        "color": "#1c1b19",
-        "theme": "dark"
-    },
-    "contributes": {
-        "themes": [
-            {
-                "label": "Srcery",
-                "uiTheme": "vs-dark",
-                "path": "./themes/Srcery-color-theme.json"
-            }
-        ]
-    },
-    "bugs": {
-        "url": "https://github.com/srcery-colors/srcery-vscode/issues"
-    },
-    "homepage": "https://github.com/srcery-colors/srcery-vscode/master/README.md",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/srcery-colors/srcery-vscode"
-    },
-    "keywords": [
-        "Vscode",
-        "Theme",
-        "Srcery"
-    ],
-    "dependencies": {
-        "vsce": "^2.15.0"
-    }
+  "name": "srcery-colors",
+  "displayName": "Srcery (official port)",
+  "description": "Srcery theme based on the srcery-colors themes",
+  "version": "0.3.10",
+  "publisher": "srcery-colors",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.19.0"
+  },
+  "categories": ["Themes"],
+  "icon": "assets/icon.png",
+  "galleryBanner": {
+    "color": "#1c1b19",
+    "theme": "dark"
+  },
+  "contributes": {
+    "themes": [
+      {
+        "label": "Srcery",
+        "uiTheme": "vs-dark",
+        "path": "./themes/Srcery-color-theme.json"
+      }
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/srcery-colors/srcery-vscode/issues"
+  },
+  "homepage": "https://github.com/srcery-colors/srcery-vscode/master/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/srcery-colors/srcery-vscode"
+  },
+  "keywords": ["Vscode", "Theme", "Srcery"],
+  "dependencies": {
+    "vsce": "^2.15.0"
+  }
 }
