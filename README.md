@@ -63,6 +63,13 @@ still being polished :
 - And now, when you launch 'Extension', you will have another instance of Visual Studio code with all your settings,
 except that the colorscheme will be loaded from the cloned repo instead of being pulled from your extensions.
 
+### Scope Inspector
+
+To lookup the actual scope for the literal string in the code, one can use the [Scope Inspector](https://code.visualstudio.com/api/language-extensions/syntax-highlight-guide#scope-inspector).
+
+![scope inspector go main](./assets/scope_inspector_go.png)
+
+Activate: **Command Palette** with the **Developer: Inspect Editor Tokens and Scopes**
 
 ## Attribution
 
