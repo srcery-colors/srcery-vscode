@@ -39,6 +39,7 @@
     "Srcery"
   ],
   "devDependencies": {
-    "@vscode/vsce": "3.9.2"
+    "@vscode/vsce": "3.9.2",
+    "xml2js": "0.5.0"
   }
 }
