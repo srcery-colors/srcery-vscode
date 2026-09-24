@@ -38,8 +38,28 @@
     "Theme",
     "Srcery"
   ],
+  "scripts": {
+    "biome:check": "biome check --write .",
+    "biome:ci": "biome ci .",
+    "check:theme": "node scripts/sync_tmtheme.mjs --check",
+    "package": "vsce package --no-dependencies",
+    "sync:theme": "node scripts/sync_tmtheme.mjs"
+  },
   "devDependencies": {
+    "@biomejs/biome": "2.5.14",
     "@vscode/vsce": "3.9.2",
     "xml2js": "0.6.2"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "26",
+      "onFail": "warn"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12",
+      "onFail": "download"
+    }
   }
 }

@@ -3,9 +3,10 @@
 //
 // Fetches themes/srcery.tmTheme from a git ref of srcery-colors/srcery-textmate.
 // Defaults to `master`; pass a branch, tag, or commit SHA to pin the source:
-//   node scripts/sync-tmtheme.mjs [ref]
+//   node scripts/sync_tmtheme.mjs [ref]
+//   node scripts/sync_tmtheme.mjs --check
 import { randomUUID } from "node:crypto";
-import { rename, unlink, writeFile } from "node:fs/promises";
+import { readFile, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseStringPromise } from "xml2js";
@@ -32,6 +33,11 @@ const PLIST_VALUE_NAMES = new Set([
   "true",
 ]);
 
+/**
+ * Read a theme response as UTF-8, rejecting missing or oversized bodies.
+ * @param {Response} response - The upstream HTTP response.
+ * @returns {Promise<string>} The downloaded XML.
+ */
 async function readBoundedResponse(response) {
   if (!response.body) {
     throw new Error("Upstream response did not include a body");
@@ -49,6 +55,11 @@ async function readBoundedResponse(response) {
   return Buffer.concat(chunks, size).toString("utf8");
 }
 
+/**
+ * Check that XML has a plist dictionary with one settings array.
+ * @param {string} xml - The vendored or downloaded tmTheme content.
+ * @returns {Promise<void>}
+ */
 async function validateTmTheme(xml) {
   const document = await parseStringPromise(xml, {
     explicitChildren: true,
@@ -76,9 +87,7 @@ async function validateTmTheme(xml) {
 
   const settingsEntries = entries.filter(
     (entry, index) =>
-      index % 2 === 0 &&
-      entry["#name"] === "key" &&
-      entry._ === "settings",
+      index % 2 === 0 && entry["#name"] === "key" && entry._ === "settings",
   );
   const settingsIndex = entries.indexOf(settingsEntries[0]);
   if (
@@ -89,6 +98,11 @@ async function validateTmTheme(xml) {
   }
 }
 
+/**
+ * Replace the vendored theme after writing it to a temporary file.
+ * @param {string} contents - The validated tmTheme XML.
+ * @returns {Promise<void>}
+ */
 async function writeAtomically(contents) {
   const temporaryPath = `${OUTPUT_PATH}.${randomUUID()}.tmp`;
   try {
@@ -100,7 +114,17 @@ async function writeAtomically(contents) {
   }
 }
 
+/**
+ * Validate the local theme in check mode, or fetch and vendor the upstream theme.
+ * @returns {Promise<void>}
+ */
 async function main() {
+  if (process.argv[2] === "--check") {
+    await validateTmTheme(await readFile(OUTPUT_PATH, "utf8"));
+    console.log(`Validated ${OUTPUT_PATH}`);
+    return;
+  }
+
   const response = await fetch(TMTHEME_URL, {
     signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
   });
