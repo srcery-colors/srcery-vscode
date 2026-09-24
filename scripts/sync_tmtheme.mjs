@@ -3,9 +3,10 @@
 //
 // Fetches themes/srcery.tmTheme from a git ref of srcery-colors/srcery-textmate.
 // Defaults to `master`; pass a branch, tag, or commit SHA to pin the source:
-//   node scripts/sync-tmtheme.mjs [ref]
+//   node scripts/sync_tmtheme.mjs [ref]
+//   node scripts/sync_tmtheme.mjs --check
 import { randomUUID } from "node:crypto";
-import { rename, unlink, writeFile } from "node:fs/promises";
+import { readFile, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseStringPromise } from "xml2js";
@@ -76,9 +77,7 @@ async function validateTmTheme(xml) {
 
   const settingsEntries = entries.filter(
     (entry, index) =>
-      index % 2 === 0 &&
-      entry["#name"] === "key" &&
-      entry._ === "settings",
+      index % 2 === 0 && entry["#name"] === "key" && entry._ === "settings",
   );
   const settingsIndex = entries.indexOf(settingsEntries[0]);
   if (
@@ -101,6 +100,12 @@ async function writeAtomically(contents) {
 }
 
 async function main() {
+  if (process.argv[2] === "--check") {
+    await validateTmTheme(await readFile(OUTPUT_PATH, "utf8"));
+    console.log(`Validated ${OUTPUT_PATH}`);
+    return;
+  }
+
   const response = await fetch(TMTHEME_URL, {
     signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
   });
