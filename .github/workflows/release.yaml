@@ -1,0 +1,70 @@
+name: GitHub release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Verify release tag
+        run: |
+          version=$(node -p 'require("./package.json").version')
+          [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          test "$GITHUB_REF_NAME" = "v$version"
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/master
+      - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3
+        with:
+          install: false
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm biome:ci
+      - run: pnpm check:theme
+      - run: pnpm package
+      - name: Prepare release notes
+        run: |
+          version=${GITHUB_REF_NAME#v}
+          awk -v version="$version" '
+            /^## \[/ {
+              if (found) exit
+              if ($0 == "## [" version "]" ||
+                  $0 ~ "^## \\[" version "\\] - [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$") found = 1
+              next
+            }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          test -s release-notes.md
+          awk '/^\[[^]]+\]: / { print }' CHANGELOG.md >> release-notes.md
+          test -f "srcery-colors-$version.vsix"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: github-release
+          path: |
+            srcery-colors-*.vsix
+            release-notes.md
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download "$GITHUB_RUN_ID" -R "$GITHUB_REPOSITORY" -n github-release -D release
+          version=${GITHUB_REF_NAME#v}
+          test -s release/release-notes.md
+          test -f "release/srcery-colors-$version.vsix"
+          gh release create "$GITHUB_REF_NAME" "release/srcery-colors-$version.vsix" \
+            -R "$GITHUB_REPOSITORY" --verify-tag --title "$GITHUB_REF_NAME" \
+            --notes-file release/release-notes.md
