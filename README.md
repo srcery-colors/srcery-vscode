@@ -1,4 +1,4 @@
-![logo](assets/title.png)
+![logo](assets/images/title.png)
 
 Srcery theme for Visual Studio Code, based on
 [srcery-colors/srcery-vim](https://github.com/srcery-colors/srcery-vim)
@@ -25,11 +25,11 @@ where you can also download the vsix.
 
 This code is from the neovim-qt project.
 
-![Screenshot of neovim-qt code](assets/Screenshot_v0.3.3.png)
+![Screenshot of neovim-qt code](assets/images/screenshot_v0.3.3.png)
 
 ### Peek
 
-![Screenshot of neovim-qt code with Peek](assets/Screenshot_v0.3.3_peek.png)
+![Screenshot of neovim-qt code with Peek](assets/images/screenshot_v0.3.3_peek.png)
 
 ## Troubleshooting
 
@@ -67,7 +67,7 @@ except that the colorscheme will be loaded from the cloned repo instead of being
 
 To lookup the actual scope for the literal string in the code, one can use the [Scope Inspector](https://code.visualstudio.com/api/language-extensions/syntax-highlight-guide#scope-inspector).
 
-![scope inspector go main](./assets/scope_inspector_go.png)
+![scope inspector go main](./assets/images/scope_inspector_go.png)
 
 Activate: **Command Palette** with the **Developer: Inspect Editor Tokens and Scopes**
 

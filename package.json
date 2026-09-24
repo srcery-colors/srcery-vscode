@@ -39,7 +39,7 @@
     "Srcery"
   ],
   "files": [
-    "assets/*.png",
+    "assets/icon.png",
     "CHANGELOG.md",
     "LICENSE",
     "themes/Srcery-color-theme.json",
