@@ -8,7 +8,7 @@ Historical dates are taken from Git tags. Dates are omitted where no matching ta
 
 ## [Unreleased]
 
-<!-- Planned for 0.4.0. Set the release version, date, and comparison links when releasing. -->
+## [0.4.0] - 2026-09-24
 
 ### Added
 
@@ -117,7 +117,8 @@ Historical dates are taken from Git tags. Dates are omitted where no matching ta
 
 - Initial release from gagbo/srcery-vscode.
 
-[Unreleased]: https://github.com/srcery-colors/srcery-vscode/compare/v0.3.10...HEAD
+[Unreleased]: https://github.com/srcery-colors/srcery-vscode/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/srcery-colors/srcery-vscode/compare/v0.3.10...v0.4.0
 [0.3.5]: https://github.com/srcery-colors/srcery-vscode/compare/v0.3.4...e16400583270e483ca52c15bb5e3a99cd6e672ea
 [0.3.4]: https://github.com/srcery-colors/srcery-vscode/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/srcery-colors/srcery-vscode/compare/v0.3.2...v0.3.3
