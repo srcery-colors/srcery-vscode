@@ -3,7 +3,7 @@
 Srcery theme for Visual Studio Code, based on
 [srcery-colors/srcery-vim](https://github.com/srcery-colors/srcery-vim)
 
-![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/srcery-colors.srcery-colors)
+![Visual Studio Marketplace Installs](https://vsmarketplacebadges.dev/installs/srcery-colors.srcery-colors.svg)
 ![Open VSX Downloads](https://img.shields.io/open-vsx/dt/srcery-colors/srcery-colors)
 
 ## Install
