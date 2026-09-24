@@ -47,3 +47,10 @@
 ### [v0.3.5]
 - Fix issue #2 with titleBar colors
 - [Technical] Add package-lock to the repo
+
+### [v0.4.0]
+
+- Align syntax highlighting with the canonical Srcery TextMate theme and update the workbench palette (#44).
+- Document the Scope Inspector for reporting highlighting issues (#45).
+- Update the Marketplace icon (#49).
+- Add Biome and theme validation, CI packaging, and an explicit VSIX file allowlist (#58, #61).
