@@ -38,6 +38,13 @@
     "Theme",
     "Srcery"
   ],
+  "files": [
+    "assets/*.png",
+    "CHANGELOG.md",
+    "LICENSE",
+    "themes/Srcery-color-theme.json",
+    "themes/srcery.tmTheme"
+  ],
   "scripts": {
     "biome:check": "biome check --write .",
     "biome:ci": "biome ci .",
