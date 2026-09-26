@@ -10,6 +10,10 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -46,6 +50,10 @@ jobs:
       - run: |
           pnpm package
           test -f "srcery-colors-${GITHUB_REF_NAME#v}.vsix"
+      - name: Attest VSIX
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-path: srcery-colors-*.vsix
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: github-release
@@ -59,6 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: read
+      attestations: read
       contents: write
     steps:
       - name: Publish GitHub release
@@ -69,6 +78,12 @@ jobs:
           version=${GITHUB_REF_NAME#v}
           test -s release/release-notes.md
           test -f "release/srcery-colors-$version.vsix"
+          gh attestation verify "release/srcery-colors-$version.vsix" \
+            --repo "$GITHUB_REPOSITORY" \
+            --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/release.yaml" \
+            --source-digest "$GITHUB_SHA" \
+            --source-ref "$GITHUB_REF" \
+            --deny-self-hosted-runners
           gh release create "$GITHUB_REF_NAME" "release/srcery-colors-$version.vsix" \
             -R "$GITHUB_REPOSITORY" --verify-tag --title "$GITHUB_REF_NAME" \
             --notes-file release/release-notes.md
