@@ -50,11 +50,15 @@
     "biome:ci": "biome ci .",
     "check:theme": "node scripts/sync_tmtheme.mjs --check",
     "package": "vsce package --no-dependencies",
-    "sync:theme": "node scripts/sync_tmtheme.mjs"
+    "sync:theme": "node scripts/sync_tmtheme.mjs",
+    "release:prepare": "release-it --ci"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
+    "@release-it/bumper": "8.0.1",
+    "@release-it/keep-a-changelog": "8.0.1",
     "@vscode/vsce": "3.9.2",
+    "release-it": "21.1.0",
     "xml2js": "0.6.2"
   },
   "devEngines": {
