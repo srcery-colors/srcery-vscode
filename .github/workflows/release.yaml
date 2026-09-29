@@ -42,9 +42,11 @@ jobs:
           fi
           awk '/^\[[^]]+\]: / { print }' CHANGELOG.md >> release-notes.md
       - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3
+        env:
+          npm_config_ignore_scripts: "true"
         with:
-          install: false
-      - run: pnpm install --frozen-lockfile --ignore-scripts
+          cache: true
+          require-lockfile: true
       - run: pnpm biome:ci
       - run: pnpm check:theme
       - run: |
