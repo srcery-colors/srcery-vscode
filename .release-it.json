@@ -1,0 +1,20 @@
+{
+  "git": {
+    "requireUpstream": false,
+    "commit": false,
+    "tag": false,
+    "tagName": "v${version}",
+    "push": false
+  },
+  "npm": false,
+  "plugins": {
+    "@release-it/bumper": {
+      "in": "package.json",
+      "out": "package.json"
+    },
+    "@release-it/keep-a-changelog": {
+      "addUnreleased": true,
+      "addVersionUrl": true
+    }
+  }
+}
