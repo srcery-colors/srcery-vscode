@@ -41,7 +41,7 @@ jobs:
             exit 1
           fi
           awk '/^\[[^]]+\]: / { print }' CHANGELOG.md >> release-notes.md
-      - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3
+      - uses: MindTooth/setup@fix/prefer-locked-pnpm
         env:
           npm_config_ignore_scripts: "true"
         with:

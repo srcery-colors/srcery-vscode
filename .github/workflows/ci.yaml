@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-slim
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3
+      - uses: MindTooth/setup@fix/prefer-locked-pnpm
         env:
           npm_config_ignore_scripts: "true"
         with:
