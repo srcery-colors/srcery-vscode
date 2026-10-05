@@ -54,7 +54,7 @@
     "release:prepare": "release-it --ci"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.14",
+    "@biomejs/biome": "2.5.15",
     "@release-it/bumper": "8.0.1",
     "@release-it/keep-a-changelog": "8.0.1",
     "@vscode/vsce": "3.9.2",
@@ -69,7 +69,7 @@
     },
     "packageManager": {
       "name": "pnpm",
-      "version": "12",
+      "version": ">=12.0.0 <13.0.0",
       "onFail": "download"
     }
   }

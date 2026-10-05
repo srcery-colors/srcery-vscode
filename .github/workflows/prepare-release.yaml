@@ -32,7 +32,7 @@ jobs:
         with:
           ref: master
           fetch-depth: 0
-      - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3
+      - uses: MindTooth/setup@fix/prefer-locked-pnpm
         with:
           install: false
       - run: pnpm install --frozen-lockfile --ignore-scripts
