@@ -9,6 +9,7 @@
     "includes": [
       "biome.json",
       "package.json",
+      "release.config.mjs",
       "scripts/**/*.mjs",
       "themes/**/*.json"
     ]

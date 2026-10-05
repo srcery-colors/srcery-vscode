@@ -1,39 +1,75 @@
 # Releasing
 
-Maintain user-facing changes under `## [Unreleased]` in `CHANGELOG.md`.
-Release preparation uses release-it and its Keep a Changelog plugin to update
-`package.json`, date the release section, preserve a new Unreleased section,
-and update comparison links. An empty Unreleased section is rejected.
-The bumper plugin writes the package version directly because `npm version`
-conflicts with this repository's pnpm-only `devEngines` configuration.
+Successful CI on `master` runs semantic-release. It determines the version,
+updates `package.json` with native `pnpm version`, generates `CHANGELOG.md`,
+and commits both files before creating a `vX.Y.Z` tag and a draft GitHub release.
+The existing `v0.4.0` tag is the migration baseline; historical notes are retained.
 
-## Prepare a release
+The Angular preset determines releases from commit messages:
 
-1. Run **Prepare release** from the Actions tab on `master`, choosing patch,
-   minor, or major. The workflow creates or updates the `release/next` draft PR.
-2. Review the version, changelog, and date. Mark the PR ready for review to run CI.
-   Rerunning preparation updates the same branch and returns the PR to draft;
-   keep changelog edits on `master` so they survive regeneration.
-3. Merge after review and successful checks.
-4. Push the matching `vX.Y.Z` tag on the reviewed merge commit. The existing
-   GitHub release workflow builds, attests, verifies, and publishes the VSIX
-   with the matching changelog section. Upload that VSIX to marketplaces manually.
+| Message | Release |
+| --- | --- |
+| `fix(theme): improve comment contrast` | Patch |
+| `perf(theme): simplify syntax matching` | Patch |
+| `feat(theme): support additional syntax scopes` | Minor |
+| A commit with a `BREAKING CHANGE:` footer | Major |
+| `chore`, `ci`, `docs`, `build`, `refactor`, `style`, or `test` | None, unless breaking |
 
-The repository must allow GitHub Actions to create pull requests under
-**Settings → Actions → General → Workflow permissions**. Preparation uses
-`GITHUB_TOKEN`; no personal access token is required. The `ready_for_review`
-CI event lets a maintainer trigger checks on the generated draft PR.
+Use a descriptive Angular-style PR title and squash merge it, preserving any
+breaking-change footer in the commit body. Angular requires the footer; `feat!:`
+alone does not declare a breaking change. At the current `0.x` version, a feature
+bumps the minor version and a breaking change releases `1.0.0`.
 
-## Prepare locally
+Do not manually edit new changelog sections or bump the version. Release notes
+come from the merged commits. Release commits use `[skip ci]` to avoid loops.
 
-From a clean release branch with current tags and dependencies installed:
+## Publication
+
+Release preparation explicitly dispatches the GitHub release workflow at its new
+tag. This works with `GITHUB_TOKEN`, whose tag pushes do not trigger workflows.
+The tagged run verifies the version and master ancestry, packages and attests the
+VSIX, then verifies its exact source SHA, tag, and signer before uploading it and
+publishing the draft. A failed build or verification leaves the release in draft.
+Marketplace uploads remain manual; use the VSIX from the published GitHub release.
+
+The repository's branch and tag rules must allow `GITHUB_TOKEN` to push release
+commits and tags. Preparation needs `contents: write` and `actions: write`;
+the publishing workflow declares its artifact and attestation permissions.
+No personal access token or separate bot account is required.
+
+## Retry a failed publication
+
+Dispatch the workflow at the existing tag, without preparing another version:
 
 ```sh
-git fetch origin --tags
-pnpm release:prepare patch
+gh workflow run release.yaml --ref vX.Y.Z
 ```
 
-Review and commit the resulting changes, then open a PR. This command does not
-commit, create tags, push, or publish packages or GitHub releases.
-Complete the current version's release before preparing the next one so that
-the plugin can use its tag as the comparison base.
+This also recovers a failed dispatch after preparation created the draft.
+Draft assets can be replaced on retry; an already published release is skipped.
+If preparation failed after pushing the release commit but before creating the
+tag or draft, complete those missing steps from that exact commit. Use its
+package version and generated changelog notes; avoid rerunning preparation and
+duplicating the changelog entry. To recreate a missing draft for an existing tag:
+
+```sh
+gh release create vX.Y.Z --draft --verify-tag --title vX.Y.Z --notes-file release-notes.md
+gh workflow run release.yaml --ref vX.Y.Z
+```
+
+Populate `release-notes.md` with that version's generated changelog section.
+Do not delete published release tags.
+
+## Validate locally
+
+Use the declared Node runtime and the pnpm version recorded in the lockfile:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm test:release
+pnpm release --dry-run
+```
+
+Dry runs analyze commits and generate notes without updating files, creating
+commits/tags/releases, or dispatching publication. Authentication and a current
+checkout of `master` may be required to verify remote access.
