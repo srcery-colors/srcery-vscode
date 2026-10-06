@@ -25,8 +25,9 @@ come from the merged commits. Release commits use `[skip ci]` to avoid loops.
 
 ## Publication
 
-Release preparation explicitly dispatches the GitHub release workflow at its new
-tag. This works with `GITHUB_TOKEN`, whose tag pushes do not trigger workflows.
+The semantic-release CLI uses the exec plugin's `successCmd` to dispatch the
+GitHub release workflow at its new tag after creating the draft release.
+This works with `GITHUB_TOKEN`, whose tag pushes do not trigger workflows.
 The tagged run verifies the version and master ancestry, packages and attests the
 VSIX, then verifies its exact source SHA, tag, and signer before uploading it and
 publishing the draft. A failed build or verification leaves the release in draft.
@@ -36,6 +37,9 @@ The repository's branch and tag rules must allow `GITHUB_TOKEN` to push release
 commits and tags. Preparation needs `contents: write` and `actions: write`;
 the publishing workflow declares its artifact and attestation permissions.
 No personal access token or separate bot account is required.
+
+The preparation job only runs for `master` pushes after successful CI. Use
+`--dry-run` locally; the CLI has no additional custom publishing guard.
 
 ## Retry a failed publication
 
@@ -66,7 +70,6 @@ Use the declared Node runtime and the pnpm version recorded in the lockfile:
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm test:release
 pnpm release --dry-run
 ```
 

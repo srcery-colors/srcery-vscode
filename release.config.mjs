@@ -10,6 +10,9 @@ export default {
       {
         // biome-ignore lint/suspicious/noTemplateCurlyInString: semantic-release template
         prepareCmd: "pnpm version ${nextRelease.version} --no-git-tag-version",
+        successCmd:
+          // biome-ignore lint/suspicious/noTemplateCurlyInString: semantic-release template
+          'gh workflow run release.yaml --ref "${nextRelease.gitTag}"',
       },
     ],
     [
