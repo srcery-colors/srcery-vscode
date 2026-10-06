@@ -4,16 +4,21 @@ on:
   push:
     branches: [master]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   check:
     runs-on: ubuntu-slim
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: MindTooth/setup@fix/prefer-locked-pnpm
+      - uses: MindTooth/setup@3b9324fefd7de5578c535f0e8fe525ba7a2fb834 # fix/prefer-locked-pnpm
         env:
           npm_config_ignore_scripts: "true"
         with:
@@ -27,3 +32,13 @@ jobs:
           name: srcery-vsix
           path: srcery-colors-*.vsix
           if-no-files-found: error
+
+  release:
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    uses: ./.github/workflows/release.yaml
+    permissions:
+      contents: write
+      actions: write
+      id-token: write
+      attestations: write

@@ -1,91 +1,115 @@
 name: GitHub release
 
 on:
-  push:
-    tags: ['v*']
+  workflow_call:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  build:
+  prepare:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
-      contents: read
-      id-token: write
-      attestations: write
+      contents: write
+      actions: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - name: Verify release tag
-        run: |
-          version=$(node -p 'require("./package.json").version')
-          [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
-          test "$GITHUB_REF_NAME" = "v$version"
-          git merge-base --is-ancestor "$GITHUB_SHA" origin/master
-      - name: Prepare release notes
-        run: |
-          version=${GITHUB_REF_NAME#v}
-          awk -v version="$version" '
-            $1 == "##" {
-              if (found) exit
-              found = ($2 == "[" version "]")
-              next
-            }
-            /^\[[^]]+\]: / { next }
-            found { print }
-          ' CHANGELOG.md > release-notes.md
-          if ! grep -q '[^[:space:]]' release-notes.md; then
-            echo "::error::CHANGELOG.md must contain non-empty release notes under ## [$version]"
-            exit 1
-          fi
-          awk '/^\[[^]]+\]: / { print }' CHANGELOG.md >> release-notes.md
-      - uses: MindTooth/setup@fix/prefer-locked-pnpm
+          persist-credentials: false
+      - uses: MindTooth/setup@3b9324fefd7de5578c535f0e8fe525ba7a2fb834 # fix/prefer-locked-pnpm
         env:
           npm_config_ignore_scripts: "true"
         with:
           cache: true
           require-lockfile: true
-      - run: pnpm biome:ci
-      - run: pnpm check:theme
-      - run: |
+      - run: pnpm release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+
+  build:
+    if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write # Read draft releases, which require repository push access.
+      id-token: write
+      attestations: write
+    outputs:
+      pending: ${{ steps.version.outputs.pending }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify release tag and draft
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(node -p 'require("./package.json").version')
+          [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          test "$GITHUB_REF_NAME" = "v$version"
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/master
+          pending=$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft)
+          echo "pending=$pending" >> "$GITHUB_OUTPUT"
+      - uses: MindTooth/setup@3b9324fefd7de5578c535f0e8fe525ba7a2fb834 # fix/prefer-locked-pnpm
+        if: steps.version.outputs.pending == 'true'
+        env:
+          npm_config_ignore_scripts: "true"
+        with:
+          cache: true
+          require-lockfile: true
+      - run: pnpm biome:ci && pnpm check:theme
+        if: steps.version.outputs.pending == 'true'
+      - name: Package VSIX
+        if: steps.version.outputs.pending == 'true'
+        run: |
           pnpm package
           test -f "srcery-colors-${GITHUB_REF_NAME#v}.vsix"
       - name: Attest VSIX
+        if: steps.version.outputs.pending == 'true'
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-path: srcery-colors-*.vsix
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: steps.version.outputs.pending == 'true'
         with:
           name: github-release
-          path: |
-            srcery-colors-*.vsix
-            release-notes.md
+          path: srcery-colors-*.vsix
           if-no-files-found: error
 
   publish:
     needs: build
+    if: needs.build.outputs.pending == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       actions: read
       attestations: read
       contents: write
     steps:
-      - name: Publish GitHub release
+      - name: Verify and publish draft release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh run download "$GITHUB_RUN_ID" -R "$GITHUB_REPOSITORY" -n github-release -D release
-          version=${GITHUB_REF_NAME#v}
-          test -s release/release-notes.md
-          test -f "release/srcery-colors-$version.vsix"
-          gh attestation verify "release/srcery-colors-$version.vsix" \
+          file="release/srcery-colors-${GITHUB_REF_NAME#v}.vsix"
+          test -s "$file"
+          gh attestation verify "$file" \
             --repo "$GITHUB_REPOSITORY" \
             --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/release.yaml" \
             --source-digest "$GITHUB_SHA" \
             --source-ref "$GITHUB_REF" \
             --deny-self-hosted-runners
-          gh release create "$GITHUB_REF_NAME" "release/srcery-colors-$version.vsix" \
-            -R "$GITHUB_REPOSITORY" --verify-tag --title "$GITHUB_REF_NAME" \
-            --notes-file release/release-notes.md
+          test "$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft)" = true
+          gh release upload "$GITHUB_REF_NAME" "$file" -R "$GITHUB_REPOSITORY" --clobber
+          gh release edit "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --draft=false
