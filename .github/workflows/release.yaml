@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: pnpm/setup@v3.1.0
+      - uses: pnpm/setup@f618924e009e490c5badb81bc821e794d0ced591 # v3.1.0
         env:
           npm_config_ignore_scripts: "true"
         with:
@@ -61,7 +61,7 @@ jobs:
           git merge-base --is-ancestor "$GITHUB_SHA" origin/master
           pending=$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft)
           echo "pending=$pending" >> "$GITHUB_OUTPUT"
-      - uses: pnpm/setup@v3.1.0
+      - uses: pnpm/setup@f618924e009e490c5badb81bc821e794d0ced591 # v3.1.0
         if: steps.version.outputs.pending == 'true'
         env:
           npm_config_ignore_scripts: "true"
