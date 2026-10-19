@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-New release entries are generated from Angular-style commit messages by semantic-release.
+New release entries are generated from Conventional Commits messages by semantic-release.
 
 Historical dates are taken from Git tags. Dates are omitted where no matching tag exists.
 
