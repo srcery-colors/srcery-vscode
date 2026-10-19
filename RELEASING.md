@@ -17,8 +17,9 @@ The Conventional Commits preset determines releases from commit messages:
 
 Use a descriptive Conventional Commits PR title and squash merge it. Preserve
 breaking-change markers in the squashed commit. Both `feat!:` and a
-`BREAKING CHANGE:` footer declare a breaking change. At the current `0.x` version, a feature
-bumps the minor version and a breaking change releases `1.0.0`.
+`BREAKING CHANGE:` footer declare a breaking change. At the current `0.x`
+version, a feature bumps the minor version and a breaking change releases
+`1.0.0`.
 
 Do not manually edit new changelog sections or bump the version. Release notes
 come from the merged commits. Release commits use `[skip ci]` to avoid loops.
