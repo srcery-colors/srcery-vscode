@@ -5,7 +5,7 @@ updates `package.json` with native `pnpm version`, generates `CHANGELOG.md`,
 and commits both files before creating a `vX.Y.Z` tag and a draft GitHub release.
 The existing `v0.4.0` tag is the migration baseline; historical notes are retained.
 
-The Angular preset determines releases from commit messages:
+The Conventional Commits preset determines releases from commit messages:
 
 | Message | Release |
 | --- | --- |
@@ -15,9 +15,9 @@ The Angular preset determines releases from commit messages:
 | A commit with a `BREAKING CHANGE:` footer | Major |
 | `chore`, `ci`, `docs`, `build`, `refactor`, `style`, or `test` | None, unless breaking |
 
-Use a descriptive Angular-style PR title and squash merge it, preserving any
-breaking-change footer in the commit body. Angular requires the footer; `feat!:`
-alone does not declare a breaking change. At the current `0.x` version, a feature
+Use a descriptive Conventional Commits PR title and squash merge it. Preserve
+breaking-change markers in the squashed commit. Both `feat!:` and a
+`BREAKING CHANGE:` footer declare a breaking change. At the current `0.x` version, a feature
 bumps the minor version and a breaking change releases `1.0.0`.
 
 Do not manually edit new changelog sections or bump the version. Release notes
