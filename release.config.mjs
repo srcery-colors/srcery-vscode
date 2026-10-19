@@ -1,15 +1,13 @@
+/** @type {import('semantic-release').GlobalConfig} */
 export default {
   branches: ["master"],
   // biome-ignore lint/suspicious/noTemplateCurlyInString: semantic-release template
   tagFormat: "v${version}",
   plugins: [
-    [
-      "@semantic-release/commit-analyzer",
-      { preset: "conventionalcommits", presetConfig: {} },
-    ],
+    ["@semantic-release/commit-analyzer", { preset: "conventionalcommits" }],
     [
       "@semantic-release/release-notes-generator",
-      { preset: "conventionalcommits", presetConfig: {} },
+      { preset: "conventionalcommits" },
     ],
     [
       "@semantic-release/exec",
