@@ -42,23 +42,9 @@ still being polished :
 
 - Clone the Git repository somewhere.
 - Open the folder in VSCode.
-- Add this launch configuration in your `launch.json` :
-```json
-// A launch configuration that launches the extension inside a new window
-{
-    "version": "0.1.0",
-    "configurations": [
-        {
-                "name": "Extension",
-                "type": "extensionHost",
-            "request": "launch",
-            "runtimeExecutable": "${execPath}",
-            "args": ["--extensionDevelopmentPath=${workspaceRoot}" ]
-        }
-    ]
-}
-```
-- And now, when you launch 'Extension', you will have another instance of Visual Studio code with all your settings,
+- Press <kbd>F5</kbd>, or run the **Extension** launch configuration from the Run and Debug view.
+  The repository ships it in [`.vscode/launch.json`](.vscode/launch.json).
+- This opens another instance of Visual Studio Code with all your settings,
 except that the colorscheme will be loaded from the cloned repo instead of being pulled from your extensions.
 
 ### Scope Inspector
