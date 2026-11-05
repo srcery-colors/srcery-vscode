@@ -6,6 +6,12 @@ New release entries are generated from Conventional Commits messages by semantic
 
 Historical dates are taken from Git tags. Dates are omitted where no matching tag exists.
 
+## [0.4.1](https://github.com/srcery-colors/srcery-vscode/compare/v0.4.0...v0.4.1) (2026-11-05)
+
+### Bug Fixes
+
+* **theme:** align workbench UI colors with the Srcery palette ([#71](https://github.com/srcery-colors/srcery-vscode/issues/71)) ([2fc3754](https://github.com/srcery-colors/srcery-vscode/commit/2fc3754fe3d2859c420f57f743e1c05fb85e6cf7))
+
 ## [0.4.0] - 2026-09-24
 
 ### Added
