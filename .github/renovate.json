@@ -6,5 +6,5 @@
     "customManagers:biomeVersions"
   ],
 
-  "enabledManagers": ["custom.jsonata", "github-actions", "npm"]
+  "enabledManagers": ["custom.jsonata", "custom.regex", "github-actions", "npm"]
 }
