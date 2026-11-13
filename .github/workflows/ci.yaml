@@ -74,8 +74,6 @@ jobs:
     needs: check
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     uses: $/.github/workflows/release.yaml
-    # contents: write prepares releases; actions: write dispatches publication.
-    # id-token: write and attestations: write permit provenance creation in the called workflow.
     permissions:
       contents: write # Allow the called workflow to prepare releases.
       actions: write # Allow the called workflow to dispatch publication.

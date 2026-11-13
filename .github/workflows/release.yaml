@@ -19,7 +19,6 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # contents: write creates release commits, tags, and drafts; actions: write dispatches publication.
     permissions:
       contents: write # Create release commits, tags, and drafts.
       actions: write # Dispatch publication at the new tag.
@@ -43,7 +42,6 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    # contents: write is needed to read draft releases.
     permissions:
       contents: write # Needed to read draft releases.
     outputs:
@@ -70,7 +68,6 @@ jobs:
     if: needs.verify.outputs.pending == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # contents: read checks out source; id-token: write and attestations: write create VSIX provenance.
     permissions:
       contents: read
       id-token: write # Sign VSIX provenance with OIDC.
@@ -78,7 +75,6 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
         with:
-          fetch-depth: 0
           persist-credentials: false
       - uses: pnpm/setup@v3.2.0
         env:
@@ -103,10 +99,9 @@ jobs:
 
   publish:
     needs: [verify, build]
-    if: needs.verify.outputs.pending == 'true' && needs.build.result == 'success'
+    if: needs.verify.outputs.pending == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # actions: read downloads the VSIX; attestations: read verifies provenance; contents: write publishes the draft.
     permissions:
       actions: read # Download the built VSIX.
       attestations: read # Verify VSIX provenance.

@@ -69,6 +69,10 @@ run; their results are not restored from another workflow run. Ordinary CI retai
 its cache for speed. VSIX artifact transfer and attestation remain separate from
 the dependency cache.
 
+`minimumReleaseAge` blocks packages published less than a day ago. For an urgent
+security fix, add the package to `minimumReleaseAgeExclude` in
+`pnpm-workspace.yaml`.
+
 The preparation job only runs for `master` pushes after successful CI. Use
 `--dry-run` locally; the CLI has no additional custom publishing guard.
 
