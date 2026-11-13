@@ -7,6 +7,9 @@ on:
 # Grant no default token permissions; each job declares its required scopes.
 permissions: {}
 
+# Block all cache restores and saves, including pnpm/setup's verification cache.
+cache-mode: none
+
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false

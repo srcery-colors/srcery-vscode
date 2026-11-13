@@ -42,9 +42,32 @@ and `actions: write` to dispatch publication. `verify` needs `contents: write`
 to read draft releases but installs no dependencies. `build` has `contents: read`,
 with `id-token: write` and `attestations: write` for provenance. `publish` needs
 `actions: read` to download the VSIX, `attestations: read` to verify it, and
-`contents: write` to upload the asset and publish the draft. Both `prepare` and
-`build` disable pnpm/setup caching to avoid restoring poisoned release caches.
+`contents: write` to upload the asset and publish the draft.
 No personal access token or separate bot account is required.
+
+Both `prepare` and `build` set `cache: false` to disable pnpm/setup's store and
+executable caches. That input alone does not disable its lockfile verification
+cache: the [pinned action's documentation](https://github.com/pnpm/setup/blob/731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1/README.md#lockfile-verification-cache)
+states that verification results are restored and saved independently of the
+`cache` input, including results for `minimumReleaseAge` and `trustPolicy`.
+
+The release workflow therefore also sets
+[`cache-mode: none`](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#cache-mode).
+GitHub enforces this restriction through scoped cache tokens, preventing cache
+restores and saves across all release jobs. Disallowed cache operations are
+skipped without failing the job. This covers the verification cache as well as
+the caches controlled by the action's input.
+
+GitHub's [cache security guidance](https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching#best-practices-for-using-caches-securely)
+warns that cached contents are not signed or verified and can change files that
+a workflow later executes. Release jobs produce public artifacts, and `prepare`
+has repository write access, so we avoid importing cache contents at this boundary.
+We accept extra registry requests and slower installs so that
+verification runs against registry metadata instead of trusting a verdict
+restored from another run. Integrity, minimum-age, and trust-policy checks still
+run; their results are not restored from another workflow run. Ordinary CI retains
+its cache for speed. VSIX artifact transfer and attestation remain separate from
+the dependency cache.
 
 The preparation job only runs for `master` pushes after successful CI. Use
 `--dry-run` locally; the CLI has no additional custom publishing guard.
