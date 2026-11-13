@@ -98,8 +98,10 @@ gh workflow run release.yaml --ref vX.Y.Z
 This also recovers a failed dispatch after preparation created the draft.
 Draft assets can be replaced on retry; an already published release runs
 `verify`, then both `registry` entries, with `build` and `publish` skipped.
-This is how to retry a failed or rejected registry publication; it is safe
-because `--skip-duplicate` ignores a version a registry already has.
+This is how to retry a failed or rejected registry publication. `--skip-duplicate`
+matches on version only: a skipped Marketplace publish does not prove the listed
+package is the release VSIX, so check any version uploaded outside this workflow.
+The `openvsx` entry's `ovsx verify` step does compare the published bytes.
 If preparation failed after pushing the release commit but before creating the
 tag or draft, complete those missing steps from that exact commit. Use its
 package version and generated changelog notes; avoid rerunning preparation and
