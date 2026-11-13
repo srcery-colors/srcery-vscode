@@ -16,6 +16,7 @@ concurrency:
 jobs:
   lockfile:
     runs-on: ubuntu-slim
+    timeout-minutes: 5
     # contents: read checks out the workflows and their action lockfile.
     permissions:
       contents: read
@@ -46,6 +47,7 @@ jobs:
   check:
     needs: [lockfile, zizmor]
     runs-on: ubuntu-slim
+    timeout-minutes: 15
     # contents: read checks out source for validation and packaging.
     permissions:
       contents: read
