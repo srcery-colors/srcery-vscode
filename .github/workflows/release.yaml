@@ -124,12 +124,16 @@ jobs:
           gh release upload "$GITHUB_REF_NAME" "$file" -R "$GITHUB_REPOSITORY" --clobber
           gh release edit "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --draft=false
 
-  marketplace:
+  registry:
     needs: [verify, publish]
     if: ${{ !cancelled() && needs.verify.result == 'success' && needs.publish.result != 'failure' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        registry: [marketplace, openvsx]
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: marketplace
+    environment: ${{ matrix.registry }}
     permissions:
       contents: read # Download the release asset.
       id-token: write # Publish with OIDC trusted publishing.
@@ -159,45 +163,19 @@ jobs:
             --source-ref "$GITHUB_REF" \
             --deny-self-hosted-runners
       - name: Publish to VS Code Marketplace
+        if: matrix.registry == 'marketplace'
         run: |
           pnpm exec vsce publish --oidc --packagePath "release/srcery-colors-${GITHUB_REF_NAME#v}.vsix" --skip-duplicate
-
-  openvsx:
-    needs: [verify, publish]
-    if: ${{ !cancelled() && needs.verify.result == 'success' && needs.publish.result != 'failure' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    environment: openvsx
-    permissions:
-      contents: read # Download the release asset.
-      id-token: write # Publish with OIDC trusted publishing.
-      attestations: read # Verify VSIX provenance.
-    steps:
-      - uses: actions/checkout@v7.0.1
-        with:
-          persist-credentials: false
-      - uses: pnpm/setup@v3.2.0
-        env:
-          npm_config_ignore_scripts: "true"
-        with:
-          cache: false
-          require-lockfile: true
-      - name: Download and verify release VSIX
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          test "$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft)" = false
-          gh release download "$GITHUB_REF_NAME" --pattern 'srcery-colors-*.vsix' -D release
-          file="release/srcery-colors-${GITHUB_REF_NAME#v}.vsix"
-          test -s "$file"
-          gh attestation verify "$file" \
-            --repo "$GITHUB_REPOSITORY" \
-            --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/release.yaml" \
-            --source-digest "$GITHUB_SHA" \
-            --source-ref "$GITHUB_REF" \
-            --deny-self-hosted-runners
       - name: Publish to Open VSX
+        if: matrix.registry == 'openvsx'
         run: |
           pnpm exec ovsx publish "release/srcery-colors-${GITHUB_REF_NAME#v}.vsix" --trusted-publishing --skip-duplicate
       - name: Verify Open VSX copy
-        run: pnpm exec ovsx verify "release/srcery-colors-${GITHUB_REF_NAME#v}.vsix"
+        if: matrix.registry == 'openvsx'
+        # Open VSX signs new versions asynchronously after upload.
+        run: |
+          for _ in 1 2 3 4 5 6 7 8; do
+            pnpm exec ovsx verify "release/srcery-colors-${GITHUB_REF_NAME#v}.vsix" && exit 0
+            sleep 30
+          done
+          exit 1
