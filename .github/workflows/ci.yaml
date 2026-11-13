@@ -26,8 +26,22 @@ jobs:
       - run: gh extension install github/gh-actions-lock --pin v0.4.1
       - run: gh actions-lock --verify
 
+  zizmor:
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: zizmorcore/zizmor-action@v0.8.1
+        with:
+          version: "1.32.0"
+          advanced-security: false
+
   check:
-    needs: lockfile
+    needs: [lockfile, zizmor]
     runs-on: ubuntu-slim
     permissions:
       contents: read
