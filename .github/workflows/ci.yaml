@@ -13,15 +13,29 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  lockfile:
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - run: gh extension install github/gh-actions-lock --pin v0.4.1
+      - run: gh actions-lock --verify
+
   check:
+    needs: lockfile
     runs-on: ubuntu-slim
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
+      - uses: pnpm/setup@v3.2.0
         env:
           npm_config_ignore_scripts: "true"
         with:
@@ -30,7 +44,7 @@ jobs:
       - run: pnpm biome:ci
       - run: pnpm check:theme
       - run: pnpm package
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: srcery-vsix
           path: srcery-colors-*.vsix
@@ -39,7 +53,7 @@ jobs:
   release:
     needs: check
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    uses: ./.github/workflows/release.yaml
+    uses: $/.github/workflows/release.yaml
     permissions:
       contents: write
       actions: write
