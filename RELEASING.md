@@ -34,7 +34,15 @@ ancestry, and draft status. Only a pending draft proceeds to `build`, which
 packages and attests the VSIX. After a successful build, `publish` verifies its
 exact source SHA, tag, and signer before uploading it and publishing the draft.
 A failed build or verification leaves the release in draft.
-Marketplace uploads remain manual; use the VSIX from the published GitHub release.
+Once the release is published, `marketplace` and `openvsx` publish that same
+VSIX to the VS Code Marketplace and Open VSX. They run in parallel and
+independently, so one failing does not block the other. Each waits for approval
+of its GitHub environment, then re-verifies the release is published and the
+VSIX attestation before publishing with OIDC trusted publishing (no tokens).
+`openvsx` finishes with `ovsx verify` against the registry's signature.
+Both use `--skip-duplicate`. They run only in the tag dispatch, because the
+registries match the workflow file `release.yaml`, which is not what the OIDC
+token names when `ci.yaml` calls it.
 
 The repository's branch and tag rules must allow `GITHUB_TOKEN` to push release
 commits and tags. `prepare` needs `contents: write` for commits, tags, and drafts,
@@ -43,6 +51,8 @@ to read draft releases but installs no dependencies. `build` has `contents: read
 with `id-token: write` and `attestations: write` for provenance. `publish` needs
 `actions: read` to download the VSIX, `attestations: read` to verify it, and
 `contents: write` to upload the asset and publish the draft.
+`marketplace` and `openvsx` have `contents: read` to download the asset,
+`id-token: write` for trusted publishing, and `attestations: read`.
 No personal access token or separate bot account is required.
 
 Both `prepare` and `build` set `cache: false` to disable pnpm/setup's store and
@@ -85,8 +95,10 @@ gh workflow run release.yaml --ref vX.Y.Z
 ```
 
 This also recovers a failed dispatch after preparation created the draft.
-Draft assets can be replaced on retry; an already published release runs only
-`verify`, with `build` and `publish` skipped.
+Draft assets can be replaced on retry; an already published release runs
+`verify`, then `marketplace` and `openvsx`, with `build` and `publish` skipped.
+This is how to retry a failed or rejected registry publication; it is safe
+because `--skip-duplicate` ignores a version a registry already has.
 If preparation failed after pushing the release commit but before creating the
 tag or draft, complete those missing steps from that exact commit. Use its
 package version and generated changelog notes; avoid rerunning preparation and
@@ -99,6 +111,18 @@ gh workflow run release.yaml --ref vX.Y.Z
 
 Populate `release-notes.md` with that version's generated changelog section.
 Do not delete published release tags.
+
+## Registry setup
+
+One-off setup, already done; recreate it if the repository or registry
+entries are replaced:
+
+- GitHub environments `marketplace` and `openvsx`, each limited to `v*` tags
+  with a required reviewer. The tag rule is the gate, since the registries do
+  not match the ref.
+- A trusted publishing policy on each registry for owner `srcery-colors`,
+  repository `srcery-vscode`, workflow `release.yaml`, and the matching
+  environment name.
 
 ## Validate locally
 
