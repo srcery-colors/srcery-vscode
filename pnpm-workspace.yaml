@@ -1,4 +1,6 @@
 ---
+minimumReleaseAge: 1440
+trustPolicy: no-downgrade
 strictDepBuilds: true
 allowBuilds:
   "@vscode/vsce-sign": false
