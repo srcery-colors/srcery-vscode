@@ -6,6 +6,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
+# Grant no default token permissions; each job declares its required scopes.
 permissions: {}
 
 concurrency:
@@ -15,6 +16,7 @@ concurrency:
 jobs:
   lockfile:
     runs-on: ubuntu-slim
+    # contents: read checks out the workflows and their action lockfile.
     permissions:
       contents: read
     env:
@@ -28,6 +30,7 @@ jobs:
 
   zizmor:
     runs-on: ubuntu-slim
+    # contents: read checks out the workflows for auditing.
     permissions:
       contents: read
     timeout-minutes: 10
@@ -43,6 +46,7 @@ jobs:
   check:
     needs: [lockfile, zizmor]
     runs-on: ubuntu-slim
+    # contents: read checks out source for validation and packaging.
     permissions:
       contents: read
     steps:
@@ -68,8 +72,10 @@ jobs:
     needs: check
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     uses: $/.github/workflows/release.yaml
+    # contents: write prepares releases; actions: write dispatches publication.
+    # id-token: write and attestations: write permit provenance creation in the called workflow.
     permissions:
-      contents: write
-      actions: write
-      id-token: write
-      attestations: write
+      contents: write # Allow the called workflow to prepare releases.
+      actions: write # Allow the called workflow to dispatch publication.
+      id-token: write # Allow the called workflow to sign provenance.
+      attestations: write # Allow the called workflow to store provenance.

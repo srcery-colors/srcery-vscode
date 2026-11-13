@@ -29,14 +29,21 @@ come from the merged commits. Release commits use `[skip ci]` to avoid loops.
 The semantic-release CLI uses the exec plugin's `successCmd` to dispatch the
 GitHub release workflow at its new tag after creating the draft release.
 This works with `GITHUB_TOKEN`, whose tag pushes do not trigger workflows.
-The tagged run verifies the version and master ancestry, packages and attests the
-VSIX, then verifies its exact source SHA, tag, and signer before uploading it and
-publishing the draft. A failed build or verification leaves the release in draft.
+The tagged run uses a dependency-free `verify` job to check the version, master
+ancestry, and draft status. Only a pending draft proceeds to `build`, which
+packages and attests the VSIX. After a successful build, `publish` verifies its
+exact source SHA, tag, and signer before uploading it and publishing the draft.
+A failed build or verification leaves the release in draft.
 Marketplace uploads remain manual; use the VSIX from the published GitHub release.
 
 The repository's branch and tag rules must allow `GITHUB_TOKEN` to push release
-commits and tags. Preparation needs `contents: write` and `actions: write`;
-the publishing workflow declares its artifact and attestation permissions.
+commits and tags. `prepare` needs `contents: write` for commits, tags, and drafts,
+and `actions: write` to dispatch publication. `verify` needs `contents: write`
+to read draft releases but installs no dependencies. `build` has `contents: read`,
+with `id-token: write` and `attestations: write` for provenance. `publish` needs
+`actions: read` to download the VSIX, `attestations: read` to verify it, and
+`contents: write` to upload the asset and publish the draft. Both `prepare` and
+`build` disable pnpm/setup caching to avoid restoring poisoned release caches.
 No personal access token or separate bot account is required.
 
 The preparation job only runs for `master` pushes after successful CI. Use
@@ -51,7 +58,8 @@ gh workflow run release.yaml --ref vX.Y.Z
 ```
 
 This also recovers a failed dispatch after preparation created the draft.
-Draft assets can be replaced on retry; an already published release is skipped.
+Draft assets can be replaced on retry; an already published release runs only
+`verify`, with `build` and `publish` skipped.
 If preparation failed after pushing the release commit but before creating the
 tag or draft, complete those missing steps from that exact commit. Use its
 package version and generated changelog notes; avoid rerunning preparation and
