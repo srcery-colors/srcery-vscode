@@ -1,5 +1,4 @@
 ---
 strictDepBuilds: true
 allowBuilds:
-  keytar: false
   "@vscode/vsce-sign": false
