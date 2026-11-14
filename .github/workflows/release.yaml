@@ -36,7 +36,7 @@ jobs:
           [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
           test "$GITHUB_REF_NAME" = "v$version"
           git merge-base --is-ancestor "$GITHUB_SHA" origin/master
-          pending=$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft)
+          pending=$(gh release view "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)
           echo "pending=$pending" >> "$GITHUB_OUTPUT"
 
   build:
@@ -96,7 +96,7 @@ jobs:
             --source-digest "$GITHUB_SHA" \
             --source-ref "$GITHUB_REF" \
             --deny-self-hosted-runners
-          test "$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft)" = true
+          test "$(gh release view "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)" = true
           gh release upload "$GITHUB_REF_NAME" "$file" -R "$GITHUB_REPOSITORY" --clobber
           gh release edit "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --draft=false
 
@@ -128,8 +128,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          test "$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft)" = false
-          gh release download "$GITHUB_REF_NAME" --pattern 'srcery-colors-*.vsix' -D release
+          test "$(gh release view "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)" = false
+          gh release download "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --pattern 'srcery-colors-*.vsix' -D release
           file="release/srcery-colors-${GITHUB_REF_NAME#v}.vsix"
           test -s "$file"
           gh attestation verify "$file" \
