@@ -81,7 +81,7 @@ jobs:
     concurrency:
       group: release-${{ github.ref }}
       cancel-in-progress: false
-    # Writes use the srcery-bot App token, not the workflow token.
+    # Writes use the srcery-colors App token, not the workflow token.
     permissions:
       contents: read
     steps:
