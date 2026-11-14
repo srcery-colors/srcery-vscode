@@ -29,10 +29,10 @@ come from the merged commits. Release commits use `[skip ci]` to avoid loops.
 ## Publication
 
 The `release` job in `ci.yaml` runs semantic-release with a token for the
-srcery-bot GitHub App (Contents and Actions write). It pushes the release commit
-and tag, creates the draft release, and uses the exec plugin's `successCmd` to
-dispatch the release workflow at the new tag. `release.yaml` is the tag run
-only.
+srcery-colors GitHub App (Contents and Actions write). It pushes the release
+commit and tag, creates the draft release, and uses the exec plugin's
+`successCmd` to dispatch the release workflow at the new tag. `release.yaml` is
+the tag run only.
 The tagged run uses a dependency-free `verify` job to check the version, master
 ancestry, and draft status. Only a pending draft proceeds to `build`, which
 packages and attests the VSIX. After a successful build, `publish` verifies its
@@ -132,12 +132,14 @@ entries are replaced:
   environment name.
 - GitHub environment `release`, limited to `master`, with the variable
   `RELEASE_APP_CLIENT_ID` and the secret `RELEASE_APP_PRIVATE_KEY` of the
-  srcery-bot App. Only the CI `release` job uses them.
-- The srcery-bot App, installed on this repository only, with Contents and
-  Actions write. It is the only bypass actor on the `master` ruleset, which
-  requires a pull request and the `lockfile`, `zizmor`, and `check` status
-  checks. The `release tags` ruleset blocks deleting, moving, and force-pushing
-  `v*` tags but allows creating them (tested), so it needs no bypass.
+  srcery-colors App. Only the CI `release` job uses them.
+- The srcery-colors App, with Contents and Actions write. It is also installed
+  on srcery-terminal, and its key can create a token for any repository it is
+  installed on, so treat the key as covering all of them. It is the only
+  bypass actor on the `master` ruleset, which requires a pull request and the
+  `lockfile`, `zizmor`, and `check` status checks. The `release tags` ruleset
+  blocks deleting, moving, and force-pushing `v*` tags but allows creating them
+  (tested), so it needs no bypass.
 
 To rotate the key, generate a new private key in the App's settings, replace
 the `RELEASE_APP_PRIVATE_KEY` secret, then delete the old key.
