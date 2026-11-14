@@ -85,8 +85,6 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Check cache mode
-        run: test "$ACTIONS_CACHE_MODE" = none
       - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
