@@ -15,7 +15,9 @@ The Conventional Commits preset determines releases from commit messages:
 | A commit with a `BREAKING CHANGE:` footer | Major |
 | `chore`, `ci`, `docs`, `build`, `refactor`, `style`, or `test` | None, unless breaking |
 
-Use a descriptive Conventional Commits PR title and squash merge it. Preserve
+Use a descriptive Conventional Commits PR title and squash merge it. The
+repository uses the PR title as the squash commit title, so the PR title is
+what semantic-release reads. Preserve
 breaking-change markers in the squashed commit. Both `feat!:` and a
 `BREAKING CHANGE:` footer declare a breaking change. At the current `0.x`
 version, a feature bumps the minor version and a breaking change releases
@@ -132,8 +134,10 @@ entries are replaced:
   `RELEASE_APP_CLIENT_ID` and the secret `RELEASE_APP_PRIVATE_KEY` of the
   srcery-bot App. Only the CI `release` job uses them.
 - The srcery-bot App, installed on this repository only, with Contents and
-  Actions write. The `master` and `release tags` rulesets only block deletion,
-  force pushes, and tag updates, so it needs no bypass.
+  Actions write. It is the only bypass actor on the `master` ruleset, which
+  requires a pull request and the `lockfile`, `zizmor`, and `check` status
+  checks. The `release tags` ruleset blocks deleting, moving, and force-pushing
+  `v*` tags but allows creating them (tested), so it needs no bypass.
 
 To rotate the key, generate a new private key in the App's settings, replace
 the `RELEASE_APP_PRIVATE_KEY` secret, then delete the old key.
