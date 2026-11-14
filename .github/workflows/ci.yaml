@@ -57,7 +57,7 @@ jobs:
           persist-credentials: false
       - uses: pnpm/setup@v3.2.0
         env:
-          npm_config_ignore_scripts: "true"
+          pnpm_config_ignore_scripts: "true"
         with:
           cache: true
           require-lockfile: true
@@ -91,7 +91,7 @@ jobs:
           persist-credentials: false
       - uses: pnpm/setup@v3.2.0
         env:
-          npm_config_ignore_scripts: "true"
+          pnpm_config_ignore_scripts: "true"
         with:
           cache: false
           require-lockfile: true
