@@ -6,6 +6,12 @@ New release entries are generated from Conventional Commits messages by semantic
 
 Historical dates are taken from Git tags. Dates are omitted where no matching tag exists.
 
+## [0.4.3](https://github.com/srcery-colors/srcery-vscode/compare/v0.4.2...v0.4.3) (2026-11-16)
+
+### Bug Fixes
+
+* **theme:** replace off-palette colors with srcery-palette values ([#119](https://github.com/srcery-colors/srcery-vscode/issues/119)) ([0702073](https://github.com/srcery-colors/srcery-vscode/commit/07020734947c1e30a97e0d88952cec1c4349ade8))
+
 ## [0.4.2](https://github.com/srcery-colors/srcery-vscode/compare/v0.4.1...v0.4.2) (2026-11-14)
 
 ### Bug Fixes
