@@ -70,8 +70,8 @@
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": "26",
-      "onFail": "warn"
+      "version": ">=26.13.0",
+      "onFail": "error"
     },
     "packageManager": {
       "name": "pnpm",
