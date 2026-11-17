@@ -56,7 +56,6 @@ jobs:
         env:
           pnpm_config_ignore_scripts: "true"
         with:
-          runtime: node@26.13
           cache: false
           require-lockfile: true
       - run: pnpm biome:ci && pnpm check:theme
@@ -123,7 +122,6 @@ jobs:
         env:
           pnpm_config_ignore_scripts: "true"
         with:
-          runtime: node@26.13
           cache: false
           require-lockfile: true
       - name: Download and verify release VSIX
