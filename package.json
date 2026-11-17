@@ -34,9 +34,15 @@
     "url": "https://github.com/srcery-colors/srcery-vscode"
   },
   "keywords": [
-    "Vscode",
-    "Theme",
-    "Srcery"
+    "srcery",
+    "vscode-theme",
+    "color-theme",
+    "dark-theme",
+    "theme",
+    "vscode",
+    "colorscheme",
+    "syntax-highlighting",
+    "editor-theme"
   ],
   "files": [
     "assets/icon.png",
