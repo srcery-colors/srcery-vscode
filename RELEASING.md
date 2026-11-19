@@ -133,9 +133,9 @@ entries are replaced:
 - GitHub environment `release`, limited to `master`, with the variable
   `RELEASE_APP_CLIENT_ID` and the secret `RELEASE_APP_PRIVATE_KEY` of the
   srcery-colors App. Only the CI `release` job uses them.
-- The srcery-colors App, with Contents and Actions write. It is also installed
-  on srcery-terminal, and its key can create a token for any repository it is
-  installed on, so treat the key as covering all of them. It is the only
+- The srcery-colors App, with Contents and Actions write. Its key can create a
+  token for any repository the App is installed on, not only this one, so
+  treat a leaked key as affecting all of them. It is the only
   bypass actor on the `master` ruleset, which requires a pull request and the
   `lockfile`, `zizmor`, and `check` status checks. The `release tags` ruleset
   blocks deleting, moving, and force-pushing `v*` tags but allows creating them
