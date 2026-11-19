@@ -32,15 +32,15 @@
           <key>bracketContentsForeground</key>
           <string>#917E6B</string>
           <key>bracketsForeground</key>
-          <string>#D0BFA1</string>
+          <string>#C5B088</string>
           <key>guide</key>
           <string>#262522</string>
           <key>activeGuide</key>
-          <string>#D0BFA1</string>
+          <string>#C5B088</string>
           <key>stackGuide</key>
           <string>#917E6B</string>
           <key>gutterForeground</key>
-          <string>#D0BFA1</string>
+          <string>#C5B088</string>
         </dict>
       </dict>
       <dict>
@@ -3052,7 +3052,7 @@
       </dict>
       <dict>
         <key>name</key>
-        <string>Markdown: fenced code block delimiter, e.g. ``` (vim @markup.raw.block via treesitter, blue; the embedded code content itself is deliberately left alone, see ALIGNMENT-PLAN.md)</string>
+        <string>Markdown: fenced code block delimiter, e.g. ``` (vim @markup.raw.block via treesitter, blue; the embedded code content itself is deliberately left alone, see docs/aligning-with-vim.md)</string>
         <key>scope</key>
         <string>punctuation.definition.raw.code-fence.begin.markdown, punctuation.definition.raw.code-fence.end.markdown</string>
         <key>settings</key>
@@ -3129,7 +3129,7 @@
       </dict>
       <dict>
         <key>name</key>
-        <string>Clojure: call-position symbol, e.g. (double x) or (name m) (vim Function/Repeat, yellow; majority case for this shared scope, let/if/cond/ns/-&gt;&gt; are minority losses, see ALIGNMENT-PLAN.md)</string>
+        <string>Clojure: call-position symbol, e.g. (double x) or (name m) (vim Function/Repeat, yellow; majority case for this shared scope, let/if/cond/ns/-&gt;&gt; are minority losses, see docs/aligning-with-vim.md)</string>
         <key>scope</key>
         <string>variable.function.clojure</string>
         <key>settings</key>
