@@ -99,6 +99,7 @@ jobs:
           test "$(gh release view "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)" = true
           gh release upload "$GITHUB_REF_NAME" "$file" -R "$GITHUB_REPOSITORY" --clobber
           gh release edit "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --draft=false
+          echo "Published [GitHub release $GITHUB_REF_NAME]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$GITHUB_REF_NAME)" >> "$GITHUB_STEP_SUMMARY"
 
   registry:
     needs: [verify, publish]
@@ -109,7 +110,10 @@ jobs:
         registry: [marketplace, openvsx]
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: ${{ matrix.registry }}
+    environment:
+      name: ${{ matrix.registry }}
+      # Shown as a link on the run page; Marketplace has no per-version page.
+      url: ${{ matrix.registry == 'marketplace' && 'https://marketplace.visualstudio.com/items?itemName=srcery-colors.srcery-colors' || format('https://open-vsx.org/extension/srcery-colors/srcery-colors/{0}', steps.release.outputs.version) }}
     permissions:
       contents: read # Download the release asset.
       id-token: write # Publish with OIDC trusted publishing.
@@ -125,6 +129,7 @@ jobs:
           cache: false
           require-lockfile: true
       - name: Download and verify release VSIX
+        id: release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -138,6 +143,7 @@ jobs:
             --source-digest "$GITHUB_SHA" \
             --source-ref "$GITHUB_REF" \
             --deny-self-hosted-runners
+          echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
       - name: Publish to VS Code Marketplace
         if: matrix.registry == 'marketplace'
         run: |
