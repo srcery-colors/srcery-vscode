@@ -41,7 +41,7 @@ jobs:
           persist-credentials: false
       - uses: zizmorcore/zizmor-action@v0.8.1
         with:
-          version: "1.32.0"
+          version: "1.33.1"
           advanced-security: false
 
   check:
